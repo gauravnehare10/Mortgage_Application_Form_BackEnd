@@ -10,9 +10,10 @@ import uuid
 router = APIRouter(prefix="/mortgage")
 
 @router.post("/applicants")
-async def add_applicant(applicant: Applicant):
+async def add_applicant(applicant: Applicant, current_user: User=Depends(get_current_user)):
     applicant_dict = applicant.dict()
     applicant_dict["_id"] = str(uuid.uuid4())
+    applicant_dict["UserId"] = current_user.userId
 
     result = await applicants.insert_one(applicant_dict)
     if result.inserted_id:
