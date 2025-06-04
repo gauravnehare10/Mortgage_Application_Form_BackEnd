@@ -21,8 +21,8 @@ async def add_applicant(applicant: Applicant):
     
 
 @router.get("/applicants")
-async def get_applicants():
-    applicants_list = await applicants.find().to_list(length=None)
+async def get_applicants(current_user: User=Depends(get_current_user)):
+    applicants_list = await applicants.find({"UserId": current_user.userId}).to_list(length=None)
     return applicants_list
 
 
